@@ -277,7 +277,7 @@ function sendRequest(options, onOk, onError, opt_data, opt_proxy, opt_retries) {
 
   request.on('error', function (e) {
     if (typeof opt_retries === 'undefined') {
-      opt_retries = 0
+      opt_retries = 2
     }
 
     if (shouldRetryRequest(opt_retries, e)) {
@@ -290,6 +290,8 @@ function sendRequest(options, onOk, onError, opt_data, opt_proxy, opt_retries) {
       if (e.code) {
         message = e.code + ' ' + message
       }
+      message = `message: ${message}; request: ${request}`
+      console.error("request error stack::::", e.stack);
       onError(new Error(message))
     }
   })
