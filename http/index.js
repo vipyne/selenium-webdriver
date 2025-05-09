@@ -1,4 +1,4 @@
-// this is a test 👾
+// this is a test 👾 👾
 
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
@@ -292,8 +292,9 @@ function sendRequest(options, onOk, onError, opt_data, opt_proxy, opt_retries) {
       if (e.code) {
         message = e.code + ' ' + message
       }
-      message = `message: ${message}; request: ${request}`
-      console.error("request error stack::::", e.stack);
+      console.error(`💔 message: ${message}`);
+      console.error(`💔 request: ${request}`);
+      console.error("💔 request error stack::::", e.stack);
       onError(new Error(message))
     }
   })
