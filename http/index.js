@@ -183,6 +183,7 @@ function sendRequest(options, onOk, onError, opt_data, opt_proxy, opt_retries) {
   var port = options.port
 
   if (opt_proxy) {
+    console.log("_____opt_proxy ", opt_proxy)
     let proxy = /** @type {RequestOptions} */ (opt_proxy)
 
     // RFC 2616, section 5.1.2:
@@ -217,6 +218,7 @@ function sendRequest(options, onOk, onError, opt_data, opt_proxy, opt_retries) {
 
   let requestFn = options.protocol === 'https:' ? https.request : http.request
   var request = requestFn(options, function onResponse(response) {
+    console.log("_____requestFn options ", options)
     if (response.statusCode == 302 || response.statusCode == 303) {
       let location
       try {
@@ -279,7 +281,7 @@ function sendRequest(options, onOk, onError, opt_data, opt_proxy, opt_retries) {
 
   request.on('error', function (e) {
     if (typeof opt_retries === 'undefined') {
-      opt_retries = 2
+      opt_retries = 1
     }
 
     if (shouldRetryRequest(opt_retries, e)) {
@@ -293,7 +295,7 @@ function sendRequest(options, onOk, onError, opt_data, opt_proxy, opt_retries) {
         message = e.code + ' ' + message
       }
       console.error(`💔 message: ${message}`);
-      console.error(`💔 request: ${request}`);
+      console.error(`💔 request: ${JSON.stringify(request, null, 2)}`);
       console.error("💔 request error stack::::", e.stack);
       onError(new Error(message))
     }
