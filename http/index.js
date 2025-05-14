@@ -218,7 +218,7 @@ function sendRequest(options, onOk, onError, opt_data, opt_proxy, opt_retries) {
 
   let requestFn = options.protocol === 'https:' ? https.request : http.request
   var request = requestFn(options, function onResponse(response) {
-    console.log("_____requestFn options ", options)
+    // console.log("_____requestFn options ", options)
     if (response.statusCode == 302 || response.statusCode == 303) {
       let location
       try {
