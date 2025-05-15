@@ -295,7 +295,7 @@ function sendRequest(options, onOk, onError, opt_data, opt_proxy, opt_retries) {
         message = e.code + ' ' + message
       }
       console.error(`💔 message: ${message}`);
-      console.error(`💔 request: ${JSON.stringify(request, null, 2)}`);
+      console.error(`💔 request options: ${JSON.stringify(options, null, 2)}`);
       console.error("💔 request error stack::::", e.stack);
       onError(new Error(message))
     }
