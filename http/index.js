@@ -295,8 +295,15 @@ function sendRequest(options, onOk, onError, opt_data, opt_proxy, opt_retries) {
         message = e.code + ' ' + message
       }
       console.error(`💔 message: ${message}`);
-      console.error(`💔 request options: ${JSON.stringify(options, null, 2)}`);
       console.error("💔 request error stack::::", e.stack);
+      try {
+        // console.error(`💔💔💔options`);
+        // console.error(options);
+        // console.error(`💔💔💔end options`);
+        const inspect = require('util').inspect;
+        console.error(inspect(options));
+        console.error(`💔`);
+      } catch (e) {}
       onError(new Error(message))
     }
   })
