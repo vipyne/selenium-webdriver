@@ -617,6 +617,7 @@ class Driver extends webdriver.WebDriver {
    */
   static createSession(caps, opt_serviceExecutor, vendorPrefix = '', vendorCapabilityKey = '') {
     let executor
+    let onQuit
     if (opt_serviceExecutor instanceof http.Executor) {
       executor = opt_serviceExecutor
       configureExecutor(executor, vendorPrefix)
@@ -636,6 +637,7 @@ class Driver extends webdriver.WebDriver {
           caps.delete(Capability.BROWSER_VERSION)
         }
       }
+      onQuit = () => service.kill()
       executor = createExecutor(service.start(), vendorPrefix)
     }
 
@@ -649,7 +651,7 @@ class Driver extends webdriver.WebDriver {
       }
     }
 
-    return /** @type {!Driver} */ (super.createSession(executor, caps))
+    return /** @type {!Driver} */ (super.createSession(executor, caps, onQuit))
   }
 
   /**
