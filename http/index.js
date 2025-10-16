@@ -285,11 +285,13 @@ function sendRequest(options, onOk, onError, opt_data, opt_proxy, opt_retries) {
     }
 
     if (shouldRetryRequest(opt_retries, e)) {
-      console.log("_____opt_retries ", opt_retries)
       opt_retries += 1
+      const delay = Math.min(1000 * Math.pow(1.5, opt_retries), 5000); // 1s, 1.5s, 2.25s, 3.4s, 5s
       setTimeout(function () {
+        console.log("_____selenium opt_retries; delay ", opt_retries, delay)
+        // console.log(`Retry ${opt_retries + 1} after ${delay}ms`);
         sendRequest(options, onOk, onError, opt_data, opt_proxy, opt_retries)
-      }, 15 * opt_retries)
+      }, delay)
     } else {
       let message = e.message
       if (e.code) {
@@ -298,9 +300,6 @@ function sendRequest(options, onOk, onError, opt_data, opt_proxy, opt_retries) {
       console.error(`💔 message: ${message}`);
       console.error("💔 request error stack::::", e.stack);
       try {
-        // console.error(`💔💔💔options`);
-        // console.error(options);
-        // console.error(`💔💔💔end options`);
         const inspect = require('util').inspect;
         console.error(inspect(options));
         console.error(`💔`);
