@@ -285,10 +285,11 @@ function sendRequest(options, onOk, onError, opt_data, opt_proxy, opt_retries) {
     }
 
     if (shouldRetryRequest(opt_retries, e)) {
+      console.log("_____opt_retries ", opt_retries)
       opt_retries += 1
       setTimeout(function () {
         sendRequest(options, onOk, onError, opt_data, opt_proxy, opt_retries)
-      }, 15)
+      }, 15 * opt_retries)
     } else {
       let message = e.message
       if (e.code) {
@@ -315,7 +316,8 @@ function sendRequest(options, onOk, onError, opt_data, opt_proxy, opt_retries) {
   request.end()
 }
 
-const MAX_RETRIES = 3
+// with backoff, ensures we wait at least 1 minute before failing
+const MAX_RETRIES = 12
 
 /**
  * A retry is sometimes needed on Windows where we may quickly run out of
