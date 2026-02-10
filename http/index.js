@@ -217,6 +217,11 @@ function sendRequest(options, onOk, onError, opt_data, opt_proxy, opt_retries) {
   }
 
   let requestFn = options.protocol === 'https:' ? https.request : http.request
+  // Log request start (set SELENIUM_DEBUG=1 to enable verbose logging)
+  if (process.env.SELENIUM_DEBUG) {
+    const bodyPreview = opt_data ? ` [${opt_data.length} bytes]` : '';
+    console.log(`➡️  ${options.method} ${options.path}${bodyPreview}`);
+  }
   var request = requestFn(options, function onResponse(response) {
     // console.log("_____requestFn options ", options)
     if (response.statusCode == 302 || response.statusCode == 303) {
@@ -275,6 +280,10 @@ function sendRequest(options, onOk, onError, opt_data, opt_proxy, opt_retries) {
         /** @type {!Object<string>} */ (response.headers),
         Buffer.concat(body).toString('utf8').replace(/\0/g, ''),
       )
+      // Log successful requests to see pattern before crash (set SELENIUM_DEBUG=1 to enable)
+      if (process.env.SELENIUM_DEBUG) {
+        console.log(`✅ ${options.method} ${options.path} -> ${response.statusCode}`);
+      }
       onOk(resp)
     })
   })
@@ -302,6 +311,13 @@ function sendRequest(options, onOk, onError, opt_data, opt_proxy, opt_retries) {
       try {
         const inspect = require('util').inspect;
         console.error(inspect(options));
+        // Log the request body (the actual payload being sent)
+        if (opt_data) {
+          const truncatedBody = opt_data.length > 1000 ? opt_data.substring(0, 1000) + '...[truncated]' : opt_data;
+          console.error(`💔 request body: ${truncatedBody}`);
+        } else {
+          console.error(`💔 request body: (none)`);
+        }
         console.error(`💔`);
       } catch (e) {}
       onError(new Error(message))
