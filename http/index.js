@@ -1,5 +1,3 @@
-// this is a test 👾 👾
-
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -183,7 +181,6 @@ function sendRequest(options, onOk, onError, opt_data, opt_proxy, opt_retries) {
   var port = options.port
 
   if (opt_proxy) {
-    console.log("_____opt_proxy ", opt_proxy)
     let proxy = /** @type {RequestOptions} */ (opt_proxy)
 
     // RFC 2616, section 5.1.2:
@@ -217,13 +214,7 @@ function sendRequest(options, onOk, onError, opt_data, opt_proxy, opt_retries) {
   }
 
   let requestFn = options.protocol === 'https:' ? https.request : http.request
-  // Log request start (set SELENIUM_DEBUG=1 to enable verbose logging)
-  if (process.env.SELENIUM_DEBUG) {
-    const bodyPreview = opt_data ? ` [${opt_data.length} bytes]` : '';
-    console.log(`➡️  ${options.method} ${options.path}${bodyPreview}`);
-  }
   var request = requestFn(options, function onResponse(response) {
-    // console.log("_____requestFn options ", options)
     if (response.statusCode == 302 || response.statusCode == 303) {
       let location
       try {
@@ -280,46 +271,25 @@ function sendRequest(options, onOk, onError, opt_data, opt_proxy, opt_retries) {
         /** @type {!Object<string>} */ (response.headers),
         Buffer.concat(body).toString('utf8').replace(/\0/g, ''),
       )
-      // Log successful requests to see pattern before crash (set SELENIUM_DEBUG=1 to enable)
-      if (process.env.SELENIUM_DEBUG) {
-        console.log(`✅ ${options.method} ${options.path} -> ${response.statusCode}`);
-      }
       onOk(resp)
     })
   })
 
   request.on('error', function (e) {
     if (typeof opt_retries === 'undefined') {
-      opt_retries = 1
+      opt_retries = 0
     }
 
     if (shouldRetryRequest(opt_retries, e)) {
       opt_retries += 1
-      const delay = Math.min(1000 * Math.pow(1.5, opt_retries), 5000); // 1s, 1.5s, 2.25s, 3.4s, 5s
       setTimeout(function () {
-        console.log("_____selenium opt_retries; delay ", opt_retries, delay)
-        // console.log(`Retry ${opt_retries + 1} after ${delay}ms`);
         sendRequest(options, onOk, onError, opt_data, opt_proxy, opt_retries)
-      }, delay)
+      }, 15)
     } else {
       let message = e.message
       if (e.code) {
         message = e.code + ' ' + message
       }
-      console.error(`💔 message: ${message}`);
-      console.error("💔 request error stack::::", e.stack);
-      try {
-        const inspect = require('util').inspect;
-        console.error(inspect(options));
-        // Log the request body (the actual payload being sent)
-        if (opt_data) {
-          const truncatedBody = opt_data.length > 1000 ? opt_data.substring(0, 1000) + '...[truncated]' : opt_data;
-          console.error(`💔 request body: ${truncatedBody}`);
-        } else {
-          console.error(`💔 request body: (none)`);
-        }
-        console.error(`💔`);
-      } catch (e) {}
       onError(new Error(message))
     }
   })
@@ -331,8 +301,7 @@ function sendRequest(options, onOk, onError, opt_data, opt_proxy, opt_retries) {
   request.end()
 }
 
-// with backoff, ensures we wait at least 1 minute before failing
-const MAX_RETRIES = 12
+const MAX_RETRIES = 3
 
 /**
  * A retry is sometimes needed on Windows where we may quickly run out of

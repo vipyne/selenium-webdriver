@@ -639,7 +639,6 @@ class Driver extends webdriver.WebDriver {
       }
       onQuit = () => service.kill()
       executor = createExecutor(service.start(), vendorPrefix)
-      onQuit = () => console.log('onQuit called.')
     }
 
     // W3C spec requires noProxy value to be an array of strings, but Chromium

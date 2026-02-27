@@ -1,3 +1,52 @@
+## 4.41.0
+
+- Support CDP versions: v143, v144, v145
+- Canonical approach to supporting AI agent directions (#16735)
+- [build] Fix Bazel JSDocs implementation (#16949)
+- create task to update dependencies (#16942)
+- Add eslint binary target for selenium-webdriver (#16992)
+- SE_DEBUG warns only when overriding user settings (#17009)
+- [grid] Add session event API for server-side event bus integration (#17015)
+
+## 4.40.0
+
+- fix JS tests on RBE (#16777)
+- use SE_DEBUG to enable debugging (#16816)
+- [node] Add asMap function to Header class and corresponding tests (#16832)
+- build js docs with bazel (#16922)
+- preserve original file's modification time when uploading to Grid (#16935)
+
+## 4.39.0
+
+- Add CDP for Chrome 143 and remove 140
+- [nodejs] Update dev dependencies to fix vulnerabilities (#16610)
+
+## 4.38.0
+
+- Add CDP for Chrome 142 and remove 139
+
+## 4.37.0
+
+- Add CDP for Chrome 141 and remove 138
+
+## 4.36.0
+
+- Add CDP for Chrome 140 and remove 137
+
+## 4.35.0
+
+- Add CDP for Chrome 139 and remove 136
+- Fix typos in javascript & rb (#16019)
+- add `default` as a value for SameSite (#16129)
+- [bidi]: fix flaky bidi network test - `can request cookies` (#16141)
+
+## 4.34.0
+
+- Bumping to nightly versions
+- Add warning when ftp proxy is used (#15905)
+- specify min required node version to >=20.0.0
+- [cdp] Add CDP for Chrome 138 and remove 135
+
 ## 4.33.0
 
 - [cdp] Add CDP for Chrome 137 and remove 134
@@ -596,7 +645,6 @@ fix: iedriver download with selenium-manager #11579
 
 - Rolling back native support for Opera Browser
 - Added new ieOptions capabilities:
-
   - fileUploadDialogTimeout
   - setEdgePath
   - setEdgeChromium
@@ -884,7 +932,7 @@ to a remote Selenium server that supports Firefox 45.
 ### Changes
 
 - Removed native support for Firefox 46 and older.
-  - The `SELENIUM_MARIONETTE` enviornment variable no longer has an effect.
+  - The `SELENIUM_MARIONETTE` environment variable no longer has an effect.
   - `selenium-webdriver/firefox.Capability.MARIONETTE` is deprecated.
   - `selenium-webdriver/firefox.Options#useGeckoDriver()` is deprecated and now
     a no-op.
@@ -994,7 +1042,7 @@ or newer.
 - (**NOTICE**) The minimum supported version of Node is now 6.9.0 LTS
 - Removed support for the SafariDriver browser extension. This has been replaced
   by Apple's
-  safaridriver, which is included wtih Safari 10
+  safaridriver, which is included with Safari 10
   (available on OS X El Capitan and macOS Sierra).
 
   To use Safari 9 or older, users will have to use an older version of Selenium.
@@ -1011,7 +1059,7 @@ or newer.
 - Extending the `selenium-webdriver/testing` module to support tests defined
   using generator
   functions.
-- The promise manager can be disabled by setting an enviornment variable:
+- The promise manager can be disabled by setting an environment variable:
   `SELENIUM_PROMISE_MANAGER=0`. This is part of a larger plan to remove the
   promise manager, as
   documented at
